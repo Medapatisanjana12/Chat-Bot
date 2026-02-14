@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding:0;
+    }
+    .chat-container {
+      width: 500px;
+      background: #BBDCE5;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-box {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    .message {
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 75%;
+      clear: both;
+    }
+    .user {
+      background: #EBFFD8;
+      color: #000;
+      float: right;
+    }
+    .bot {
+      background: #EBFFD8;
+      color: #000;
+      float: left;
+    }
+    .input-box {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    .input-box input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+    .input-box button {
+      padding: 10px 15px;
+      background: #00809D;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+
+
+<body>
+ 
+  <div class="chat-container">
+    <div class="chat-box" id="chat-box"></div>
+    <div class="input-box">
+      <input type="text" id="user-input" placeholder="Start Conversation...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function appendMessage(sender, text) {
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message", sender);
+      msgDiv.innerText = text;
+      document.getElementById("chat-box").appendChild(msgDiv);
+      document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+    }
+
+    async function sendMessage() {
+      const inputField = document.getElementById("user-input");
+      const userText = inputField.value.trim();
+      if (userText === "") return;
+
+      appendMessage("user", userText);
+      inputField.value = "";
+
+      const response = await fetch("/get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ msg: userText })
+      });
+
+      const data = await response.json();
+      appendMessage("bot", data.response);
+    }
+  </script>
+</body>
+</html>

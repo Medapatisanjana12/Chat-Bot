@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 
-data=pd.read_csv(r"C:\Users\medap\OneDrive - Aditya Educational Institutions\Documents\bot.csv")
+data=pd.read_csv("bot.csv")
 x=data['q']
 y=data['a']
 
